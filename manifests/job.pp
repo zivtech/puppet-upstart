@@ -33,16 +33,16 @@ define upstart::job (
 ) {
 
   validate_re($ensure, '^(present|absent)$',
-    "ensure must be 'present' or 'absent'.")
+    'ensure must be "present" or "absent".')
 
   validate_re($service_ensure, '^(running|true|stopped|false)$',
-    "service_ensure must be 'running' or 'stopped'.")
+    'service_ensure must be "running" or "stopped".')
 
   validate_re($console, '^(log|none|output)$',
-    "console must be 'log', 'none', or 'output'.")
+    'console must be "log", "none", or "output".')
 
   validate_re($expect, '^(|fork|daemon|stop)$',
-    "expect must be 'fork', 'daemon', 'stop'.")
+    'expect must be "fork", "daemon", "stop".')
 
   validate_bool($service_enable)
   validate_bool($respawn)
@@ -53,7 +53,7 @@ define upstart::job (
   validate_hash($environment)
 
   if !(empty($script) or empty($exec)) {
-    fail("You cannot specify both script and exec. Choose one.")
+    fail('You cannot specify both script and exec. Choose one.')
   }
 
   $config_path = "${upstart::init_dir}/${name}.conf"
