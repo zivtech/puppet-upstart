@@ -16,6 +16,6 @@ chdir <%= @chdir %>
 <% unless environment.empty? -%>
 
 <%   environment.each do |key, value| -%>
-env <%= key %> <%= value %>
+env <%= key %>=<%= value %>
 <%   end -%>
 <% end -%>
