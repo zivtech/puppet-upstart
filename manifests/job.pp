@@ -29,7 +29,8 @@ define upstart::job (
   $post_start     = undef,
   $post_stop      = undef,
   $script         = undef,
-  $exec           = undef
+  $exec           = undef,
+  $restart        = undef
 ) {
 
   validate_re($ensure, '^(present|absent)$',
@@ -79,6 +80,12 @@ define upstart::job (
       provider  => 'upstart',
       require   => File[$config_path],
       subscribe => File[$config_path],
+    }
+
+    if !empty($restart) {
+      Service[$name] {
+        restart => $restart,
+      }
     }
   } else {
     warning("Removing upstart job config: ${name}. You are responsible for stopping the service.")
