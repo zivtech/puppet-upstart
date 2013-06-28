@@ -1,3 +1,5 @@
+# = Class: upstart::params
+#
 class upstart::params {
   $package     = 'upstart'
   $init_dir    = '/etc/init'
