@@ -36,6 +36,8 @@ define upstart::job (
   $task           = false,
 ) {
 
+  require upstart
+
   validate_re($ensure, '^(present|absent)$',
   'ensure must be "present" or "absent".')
 
