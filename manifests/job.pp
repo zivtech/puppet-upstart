@@ -32,7 +32,8 @@ define upstart::job (
   $post_stop      = undef,
   $script         = undef,
   $exec           = undef,
-  $restart        = undef
+  $restart        = undef,
+  $task           = false,
 ) {
 
   validate_re($ensure, '^(present|absent)$',
@@ -69,27 +70,29 @@ define upstart::job (
     content => template('upstart/job.erb'),
   }
 
-  # We can only manage the service if the job config is there.
-  # We could invert the dependency relationship between the
-  # config file and the service depending on whether $ensure
-  # was 'present' or 'absent', but that would only work on the
-  # first run. Hopefully, we can come up with something better,
-  # but this works well enough for now.
-  if $ensure == 'present' {
-    service { $name:
-      ensure    => $service_ensure,
-      enable    => $service_enable,
-      provider  => 'upstart',
-      require   => File[$config_path],
-      subscribe => File[$config_path],
-    }
-
-    if !empty($restart) {
-      Service[$name] {
-        restart => $restart,
+  if ! $task {
+    # We can only manage the service if the job config is there.
+    # We could invert the dependency relationship between the
+    # config file and the service depending on whether $ensure
+    # was 'present' or 'absent', but that would only work on the
+    # first run. Hopefully, we can come up with something better,
+    # but this works well enough for now.
+    if $ensure == 'present' {
+      service { $name:
+        ensure    => $service_ensure,
+        enable    => $service_enable,
+        provider  => 'upstart',
+        require   => File[$config_path],
+        subscribe => File[$config_path],
       }
+
+      if !empty($restart) {
+        Service[$name] {
+          restart => $restart,
+        }
+      }
+    } else {
+      warning("Removing upstart job config: ${name}. You are responsible for stopping the service.")
     }
-  } else {
-    warning("Removing upstart job config: ${name}. You are responsible for stopping the service.")
   }
 }
