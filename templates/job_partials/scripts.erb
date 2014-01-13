@@ -16,6 +16,15 @@ post-start script
 end script
 <% end -%>
 <% ########################## -%>
+<% if @pre_stop -%>
+
+pre-stop script
+<%   @pre_stop.each_line do |line| -%>
+  <%= line -%>
+<%   end -%>
+end script
+<% end -%>
+<% ########################## -%>
 <% if @post_stop -%>
 
 post-stop script

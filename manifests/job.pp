@@ -23,27 +23,26 @@ define upstart::job (
   $umask          = undef,
   $oom_score      = undef,
   $nice           = undef,
-  $limit          = {},
-  $environment    = {},
+  $limit          = {
+  }
+  ,
+  $environment    = {
+  }
+  ,
   $pre_start      = undef,
   $post_start     = undef,
+  $pre_stop       = undef,
   $post_stop      = undef,
   $script         = undef,
   $exec           = undef,
-  $restart        = undef
-) {
+  $restart        = undef) {
+  validate_re($ensure, '^(present|absent)$', 'ensure must be "present" or "absent".')
 
-  validate_re($ensure, '^(present|absent)$',
-    'ensure must be "present" or "absent".')
+  validate_re($service_ensure, '^(running|true|stopped|false)$', 'service_ensure must be "running" or "stopped".')
 
-  validate_re($service_ensure, '^(running|true|stopped|false)$',
-    'service_ensure must be "running" or "stopped".')
+  validate_re($console, '^(log|none|output)$', 'console must be "log", "none", or "output".')
 
-  validate_re($console, '^(log|none|output)$',
-    'console must be "log", "none", or "output".')
-
-  validate_re($expect, '^(|fork|daemon|stop)$',
-    'expect must be "fork", "daemon", "stop".')
+  validate_re($expect, '^(|fork|daemon|stop)$', 'expect must be "fork", "daemon", "stop".')
 
   validate_bool($service_enable)
   validate_bool($respawn)
@@ -84,8 +83,7 @@ define upstart::job (
 
     if !empty($restart) {
       Service[$name] {
-        restart => $restart,
-      }
+        restart => $restart, }
     }
   } else {
     warning("Removing upstart job config: ${name}. You are responsible for stopping the service.")
