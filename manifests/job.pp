@@ -94,7 +94,8 @@ define upstart::job (
         }
       }
     } else {
-      warning("Removing upstart job config: ${name}. You are responsible for stopping the service.")
+      warning("Removing upstart job config: ${name}. You are responsible for \
+stopping the service.")
     }
   }
 }
