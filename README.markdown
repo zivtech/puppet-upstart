@@ -55,9 +55,9 @@ upstart::job { 'nodejs':
 APP_PORT=8881 \
 APP_MONGO=mongo1.domain.local \
 exec start-stop-daemon --start --quiet --chuid nodejs \
---chdir /home/nodejs/app/ \
---pidfile /home/nodejs/app/app.pid \
---exec node /home/nodejs/app/main.js
+    --chdir /home/nodejs/app/ \
+    --pidfile /home/nodejs/app/app.pid \
+    --exec node /home/nodejs/app/main.js
 ',
     require     => Class[ 'nodejs' ],
 }
