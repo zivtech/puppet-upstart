@@ -2,9 +2,9 @@
 start on <%= @start_on %>
 stop on <%=  @stop_on  %>
 <% ########################## -%>
-<% unless emits.empty? -%>
+<% unless @emits.empty? -%>
 
-<%   emits.each do |event| -%>
+<%   @emits.each do |event| -%>
 emits <%= event %>
 <%   end -%>
 <% end -%>

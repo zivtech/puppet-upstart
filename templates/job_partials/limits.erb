@@ -13,9 +13,9 @@ nice <%= @nice -%>
 umask <%= @umask -%>
 <% end -%>
 <% ########################## -%>
-<% unless limit.empty? -%>
+<% unless @limit.empty? -%>
 
-<%   limit.each do |limit, value| -%>
+<%   @limit.each do |limit, value| -%>
 limit <%= limit %> <%= value %>
 <%   end -%>
 <% end -%>
