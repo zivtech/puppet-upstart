@@ -56,6 +56,8 @@ define upstart::job (
     fail('You cannot specify both script and exec. Choose one.')
   }
 
+  require upstart
+
   $config_path = "${upstart::init_dir}/${name}.conf"
 
   file { $config_path:
