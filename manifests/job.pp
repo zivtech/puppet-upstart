@@ -66,6 +66,11 @@ define upstart::job (
     group   => 'root',
     mode    => '0644',
     content => template('upstart/job.erb'),
+  } ->
+  file { "initd_symlink_${name}":
+    ensure => link,
+    path   => "/etc/init.d/${name}",
+    target => '/lib/init/upstart-job',
   }
 
   # We can only manage the service if the job config is there.
