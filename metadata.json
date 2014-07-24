@@ -1,13 +1,13 @@
 {
   "name": "oasis-upstart",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "summary": "Puppet Upstart module",
   "author": "DevOps Team Oasiswork",
   "description": "This module manages Upstart job configurations.\nForked from https://github.com/bison/puppet-upstart",
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": "\u003e\u003d 0.1.6"
+      "version_requirement": ">= 0.1.6"
     }
   ],
   "types": [],
