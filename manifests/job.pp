@@ -26,7 +26,7 @@ define upstart::job (
   $limit          = {
   }
   ,
-  $environment    = {
+  $env    = {
   }
   ,
   $pre_start      = undef,
@@ -50,7 +50,7 @@ define upstart::job (
   validate_array($emits)
 
   validate_hash($limit)
-  validate_hash($environment)
+  validate_hash($env)
 
   if !(empty($script) or empty($exec)) {
     fail('You cannot specify both script and exec. Choose one.')
