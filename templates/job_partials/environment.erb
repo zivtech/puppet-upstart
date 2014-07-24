@@ -13,9 +13,9 @@ setgid <%= @group %>
 chdir <%= @chdir %>
 <% end -%>
 <% ########################## -%>
-<% unless @environment.empty? -%>
+<% unless @env.empty? -%>
 
-<%   @environment.each do |key, value| -%>
+<%   @env.each do |key, value| -%>
 env <%= key %>=<%= value %>
 <%   end -%>
 <% end -%>

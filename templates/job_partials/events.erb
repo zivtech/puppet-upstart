@@ -5,7 +5,7 @@ stop on <%=  @stop_on  %>
 <% unless @emits.empty? -%>
 
 <%   @emits.each do |event| -%>
-emits <%= event %>
+emits <%= @event %>
 <%   end -%>
 <% end -%>
 <% ########################## -%>
