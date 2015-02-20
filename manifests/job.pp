@@ -1,3 +1,5 @@
+# Define: upstart::job
+#
 define upstart::job (
   $ensure         = 'present',
   $service_ensure = 'running',
@@ -35,14 +37,23 @@ define upstart::job (
   $post_stop      = undef,
   $script         = undef,
   $exec           = undef,
-  $restart        = undef) {
-  validate_re($ensure, '^(present|absent)$', 'ensure must be "present" or "absent".')
+  $restart        = undef,
+  $task           = false,
+) {
 
-  validate_re($service_ensure, '^(running|true|stopped|false)$', 'service_ensure must be "running" or "stopped".')
+  require upstart
 
-  validate_re($console, '^(log|none|output)$', 'console must be "log", "none", or "output".')
+  validate_re($ensure, '^(present|absent)$',
+  'ensure must be "present" or "absent".')
 
-  validate_re($expect, '^(|fork|daemon|stop)$', 'expect must be "fork", "daemon", "stop".')
+  validate_re($service_ensure, '^(running|true|stopped|false)$',
+  'service_ensure must be "running" or "stopped".')
+
+  validate_re($console, '^(log|none|output)$',
+  'console must be "log", "none", or "output".')
+
+  validate_re($expect, '^(|fork|daemon|stop)$',
+  'expect must be "fork", "daemon", "stop".')
 
   validate_bool($service_enable)
   validate_bool($respawn)
@@ -73,26 +84,30 @@ define upstart::job (
     target => '/lib/init/upstart-job',
   }
 
-  # We can only manage the service if the job config is there.
-  # We could invert the dependency relationship between the
-  # config file and the service depending on whether $ensure
-  # was 'present' or 'absent', but that would only work on the
-  # first run. Hopefully, we can come up with something better,
-  # but this works well enough for now.
-  if $ensure == 'present' {
-    service { $name:
-      ensure    => $service_ensure,
-      enable    => $service_enable,
-      provider  => 'upstart',
-      require   => File[$config_path],
-      subscribe => File[$config_path],
-    }
+  if ! $task {
+    # We can only manage the service if the job config is there.
+    # We could invert the dependency relationship between the
+    # config file and the service depending on whether $ensure
+    # was 'present' or 'absent', but that would only work on the
+    # first run. Hopefully, we can come up with something better,
+    # but this works well enough for now.
+    if $ensure == 'present' {
+      service { $name:
+        ensure    => $service_ensure,
+        enable    => $service_enable,
+        provider  => 'upstart',
+        require   => File[$config_path],
+        subscribe => File[$config_path],
+      }
 
-    if !empty($restart) {
-      Service[$name] {
-        restart => $restart, }
+      if !empty($restart) {
+        Service[$name] {
+          restart => $restart,
+        }
+      }
+    } else {
+      warning("Removing upstart job config: ${name}. You are responsible for \
+stopping the service.")
     }
-  } else {
-    warning("Removing upstart job config: ${name}. You are responsible for stopping the service.")
   }
 }

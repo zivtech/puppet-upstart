@@ -1,52 +1,65 @@
-Puppet Module for Upstart
-=========================
+# puppet-upstart
+[![Build Status](https://travis-ci.org/Slashbunny/puppet-upstart.png?branch=master)](https://travis-ci.org/Slashbunny/puppet-upstart)
+## Overview
 
 This module manages Upstart job configurations and the resulting
 services. It includes support for enabling Upstart's per-user jobs.
 
-Basic Usage
------------
-
-    class { 'upstart':
-      user_jobs => true,
-    }
-
-Or simply:
-
-    include upstart
-
-Creating a job and enabline the service
----------------------------------------
-
-    upstart::job { 'test_service':
-      description    => "This is an example upstart service",
-      version        => "3626f2",
-      respawn        => true,
-      respawn_limit  => '5 10',
-      user           => 'app-user',
-      group          => 'app-user',
-      chdir          => '/path/to/app',
-      exec           => "start.sh",
-    }
-
-Dependencies
-------------
+## Dependencies
 
 - [stdlib](https://github.com/puppetlabs/puppetlabs-stdlib)
 
-Copyright and License
----------------------
+## Usage
 
-Copyright (C) 2012 Brad Ison
+Include the base class first:
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+```puppet
+include 'upstart'
+```
 
-  http://www.apache.org/licenses/LICENSE-2.0
+Or pass in the `user_jobs` parameter to manage per-user jobs:
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+```puppet
+class { 'upstart':
+    user_jobs => true,
+}
+```
+
+Create a basic upstart service:
+
+```puppet
+include 'upstart'
+
+upstart::job { 'test_service':
+    description    => 'This is an example upstart service',
+    version        => '3626f2',
+    respawn        => true,
+    respawn_limit  => '5 10',
+    user           => 'app-user',
+    group          => 'app-user',
+    chdir          => '/path/to/app',
+    exec           => 'start.sh',
+}
+```
+
+Create a nodejs-based upstart service with a custom script block using puppetlab's nodejs module:
+
+```puppet
+include 'upstart'
+include 'nodejs'
+
+upstart::job { 'nodejs':
+    description => 'NodeJS Application Server',
+    respawn     => true,
+    script      => '
+APP_PORT=8881 \
+APP_MONGO=mongo1.domain.local \
+exec start-stop-daemon --start --quiet --chuid nodejs \
+    --chdir /home/nodejs/app/ \
+    --pidfile /home/nodejs/app/app.pid \
+    --exec node /home/nodejs/app/main.js
+',
+    require     => Class[ 'nodejs' ],
+}
+```
+
