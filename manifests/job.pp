@@ -1,44 +1,41 @@
 # Define: upstart::job
 #
 define upstart::job (
-  $ensure         = 'present',
-  $service_ensure = 'running',
-  $service_enable = true,
-  $author         = 'puppet-upstart',
-  $description    = undef,
-  $version        = undef,
-  $usage          = undef,
-  $start_on       = 'runlevel [2345]',
-  $stop_on        = 'runlevel [016]',
-  $emits          = [],
-  $instance       = undef,
-  $expect         = undef,
-  $respawn        = false,
-  $respawn_limit  = undef,
-  $normal_exit    = undef,
-  $kill_signal    = undef,
-  $kill_timeout   = undef,
-  $user           = undef,
-  $group          = undef,
-  $chdir          = undef,
-  $console        = 'log',
-  $umask          = undef,
-  $oom_score      = undef,
-  $nice           = undef,
-  $limit          = {
-  }
-  ,
-  $env    = {
-  }
-  ,
-  $pre_start      = undef,
-  $post_start     = undef,
-  $pre_stop       = undef,
-  $post_stop      = undef,
-  $script         = undef,
-  $exec           = undef,
-  $restart        = undef,
-  $task           = false,
+  $ensure              = 'present',
+  $service_ensure      = 'running',
+  $service_enable      = true,
+  $author              = 'puppet-upstart',
+  $description         = undef,
+  $version             = undef,
+  $usage               = undef,
+  $start_on            = 'runlevel [2345]',
+  $stop_on             = 'runlevel [016]',
+  $emits               = [],
+  $instance            = undef,
+  $expect              = undef,
+  $respawn             = false,
+  $respawn_limit       = undef,
+  $normal_exit         = undef,
+  $kill_signal         = undef,
+  $kill_timeout        = undef,
+  $user                = undef,
+  $group               = undef,
+  $chdir               = undef,
+  $console             = 'log',
+  $umask               = undef,
+  $oom_score           = undef,
+  $nice                = undef,
+  $limit               = {},
+  $env                 = {},
+  $pre_start           = undef,
+  $post_start          = undef,
+  $pre_stop            = undef,
+  $post_stop           = undef,
+  $script              = undef,
+  $exec                = undef,
+  $restart             = undef,
+  $task                = false,
+  $run_type_service    = true,
 ) {
 
   require upstart
@@ -85,29 +82,31 @@ define upstart::job (
   }
 
   if ! $task {
-    # We can only manage the service if the job config is there.
-    # We could invert the dependency relationship between the
-    # config file and the service depending on whether $ensure
-    # was 'present' or 'absent', but that would only work on the
-    # first run. Hopefully, we can come up with something better,
-    # but this works well enough for now.
-    if $ensure == 'present' {
-      service { $name:
-        ensure    => $service_ensure,
-        enable    => $service_enable,
-        provider  => 'upstart',
-        require   => File[$config_path],
-        subscribe => File[$config_path],
-      }
-
-      if !empty($restart) {
-        Service[$name] {
-          restart => $restart,
+    if $run_type_service {
+      # We can only manage the service if the job config is there.
+      # We could invert the dependency relationship between the
+      # config file and the service depending on whether $ensure
+      # was 'present' or 'absent', but that would only work on the
+      # first run. Hopefully, we can come up with something better,
+      # but this works well enough for now.
+      if $ensure == 'present' {
+        service { $name:
+          ensure    => $service_ensure,
+          enable    => $service_enable,
+          provider  => 'upstart',
+          require   => File[$config_path],
+          subscribe => File[$config_path],
         }
+
+        if !empty($restart) {
+          Service[$name] {
+            restart => $restart,
+          }
+        }
+      } else {
+        warning("Removing upstart job config: ${name}. You are responsible for \
+  stopping the service.")
       }
-    } else {
-      warning("Removing upstart job config: ${name}. You are responsible for \
-stopping the service.")
     }
   }
 }
