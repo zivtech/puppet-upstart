@@ -1,6 +1,6 @@
 {
   "name": "spantree-upstart",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "spantree",
   "summary": "Puppet Upstart module",
   "license": "Apache-2.0",
