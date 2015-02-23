@@ -1,18 +1,32 @@
 {
-  "name": "deversus-upstart",
-  "version": "0.0.2",
+  "name": "spantree-upstart",
+  "version": "0.0.3",
+  "author": "spantree",
   "summary": "Puppet Upstart module",
-  "author": "DevOps Team Oasiswork",
-  "description": "This module manages Upstart job configurations.\nForked from https://github.com/bison/puppet-upstart",
+  "license": "Apache-2.0",
+  "source": "https://github.com/Spantree/puppet-upstart.git",
+  "project_page": "https://github.com/Spantree/puppet-upstart",
+  "issues_url": "https://github.com/Spantree/puppet-upstart/issues",
+  "description": "This module manages Upstart job configurations.\nForked from https://github.com/bison/puppet-upstart and others.",
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "12.04",
+        "14.04"
+      ]
+    }
+  ],
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 0.1.6"
+      "version_requirement": ">= 0.1.6 <5.0.0"
     }
   ],
-  "types": [],
-  "checksums": {},
-  "source": "https://github.com/deversus/puppet-upstart.git",
-  "project_page": "",
-  "license": "Apache License, Version 2.0"
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">=3.2.0 <4.0.0"
+    }
+  ]
 }

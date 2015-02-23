@@ -1,5 +1,5 @@
 # puppet-upstart
-[![Build Status](https://travis-ci.org/Slashbunny/puppet-upstart.png?branch=master)](https://travis-ci.org/Slashbunny/puppet-upstart)
+
 ## Overview
 
 This module manages Upstart job configurations and the resulting
