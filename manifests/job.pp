@@ -50,8 +50,10 @@ define upstart::job (
   validate_re($console, '^(log|none|output)$',
   'console must be "log", "none", or "output".')
 
-  validate_re($expect, '^(|fork|daemon|stop)$',
-  'expect must be "fork", "daemon", "stop".')
+  if ($expect != undef) {
+    validate_re($expect, '^(|fork|daemon|stop)$',
+    'expect must be "fork", "daemon", "stop".')
+  }
 
   validate_bool($service_enable)
   validate_bool($respawn)
